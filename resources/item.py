@@ -36,7 +36,8 @@ class Item(Resource):
         try:
             #item.insert()
             item.save_to_db()
-        except:
+        except Exception as e:
+            print(str(e))
             return {"message": "An error occurred while inserting the item."}, 500 # Internal server error
 
         return item.json(), 201
