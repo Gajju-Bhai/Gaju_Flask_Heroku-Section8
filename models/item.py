@@ -18,7 +18,12 @@ class ItemModel(db.Model):
         self.store_id = store_id
 
     def json(self):
-        return {"name": self.name, "price": self.price}
+        return {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "store_id":self.store_id
+        }
 
     @classmethod
     def find_item_by_name(cls, name):
@@ -34,6 +39,10 @@ class ItemModel(db.Model):
         #     return cls(*row)
 
         return cls.query.filter_by(name=name).first()  # SELECT * FROM items WHERE name=name
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
 
     # def insert(self):
     #     connection = sqlite3.connect("my_data.db")
