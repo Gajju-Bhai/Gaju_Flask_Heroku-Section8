@@ -20,6 +20,10 @@ class UserModel(db.Model):
         }
 
     @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
+    @classmethod
     def find_by_username(cls, username):
         # connection = sqlite3.connect("my_data.db")
         # cursor = connection.cursor()
