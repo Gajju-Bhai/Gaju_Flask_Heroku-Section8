@@ -20,6 +20,12 @@ api = Api(app)
 #jwt = JWT(app, authenticate, identity)  # /auth
 jwt = JWTManager(app)
 
+@jwt.user_claims_loader
+def add_claims_to_jwt(identity):
+    if identity == 1:    # instead of hard-coding the value, you should read it from a config file or a database
+        return {"is_admin": True}
+    return {"is_admin": False}
+
 # class Student(Resource):
 #     def get(self,name):
 #         return {'student': name}

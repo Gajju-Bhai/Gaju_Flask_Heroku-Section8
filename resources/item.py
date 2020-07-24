@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_claims
 # import sqlite3
 from models.item import ItemModel
 
@@ -42,6 +42,7 @@ class Item(Resource):
 
         return item.json(), 201
 
+    @jwt_required
     def delete(self, name):
         # connection = sqlite3.connect("my_data.db")
         # cursor = connection.cursor()
@@ -52,6 +53,9 @@ class Item(Resource):
         # connection.close()
         # return {"message": "item deleted"}
 
+        claims = get_jwt_claims()
+        if not claims["is_admin"]:
+            return {"message": "Admin privilege required."}, 401
         item = ItemModel.find_item_by_name(name)
         if item:
             item.delete_from_db()
