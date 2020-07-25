@@ -6,7 +6,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
 #from security import authenticate, identity
-from resources.user import UserRegister, User, UserList, UserLogin, TokenRefresh
+from resources.user import UserRegister, User, UserList, UserLogin, TokenRefresh, UserLogout
 from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from blacklist import BLACKLIST
@@ -26,7 +26,7 @@ jwt = JWTManager(app)
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
 @jwt.token_in_blacklist_loader
 def check_if_token_in_blacklist(decrypted_token):
-    return decrypted_token['identity'] in BLACKLIST  # Here we blacklist particular users.
+    return decrypted_token['jti'] in BLACKLIST  # Here we blacklist particular users.
 
 @jwt.user_claims_loader
 def add_claims_to_jwt(identity):
@@ -87,6 +87,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(User, '/user/<int:user_id>')
 api.add_resource(UserList, '/users')
 api.add_resource(UserLogin, '/login')
+api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/refresh')
 api.add_resource(Store, '/store/<string:name>')
 api.add_resource(StoreList, '/stores')
